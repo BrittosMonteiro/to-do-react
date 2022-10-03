@@ -34,6 +34,13 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+.page-title {
+  font-weight: 400;
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 32px;
+}
+
 .form-todo {
   display: flex;
   flex-direction: column;
@@ -54,27 +61,41 @@ body {
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 1px solid #777;
-  padding: 10px;
   border-radius: 2px;
+  gap: 8px;
 }
 .newTaskArea input {
   width: 100%;
   caret-color: #fff;
-  color: #fff;
+  border: 2px solid #444;
+  padding: 8px;
+  border-radius: 4px;
+  transition: 0.5s;
+}
+.newTaskArea input:focus {
+  border: 2px solid #fff;
 }
 .newTaskArea input::placeholder {
-  color: #666;
+  color: #aaa;
+}
+.newTaskArea input:focus::placeholder {
+  color: #101010;
 }
 
 .newTaskArea button,
-.newTaskArea input {
+.newTaskArea input,
+.newTaskArea select {
   background-color: transparent;
+  color: #fff;
+}
+.newTaskArea select * {
+  color: #000;
 }
 
 .newTaskArea button {
   color: #fff;
   cursor: pointer;
+  align-items: center;
   padding: 5px;
   transition: 0.5s;
   border-radius: 2px;
@@ -82,8 +103,8 @@ body {
 
 .newTaskArea button:hover,
 .newTaskArea button:focus {
-  background-color: green;
-  transform: rotate(180deg);
+  background-color: #111139;
+  transform: rotate(360deg);
 }
 
 .list-todo {
@@ -114,12 +135,22 @@ body {
   flex-direction: row;
   align-items: center;
 }
-.todo-item div span{
-    margin-left: 8px;
+.todo-item div span {
+  margin-left: 8px;
 }
 .btn-icon {
   background-color: transparent;
   font-size: initial;
   cursor: pointer;
   display: flex;
+}
+
+.no-data {
+  background-color: #212121;
+  color: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: 300;
+  font-size: 14px;
+  text-align: center;
 }
