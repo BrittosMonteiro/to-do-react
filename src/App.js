@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Circle, CheckCircle, Trash } from "phosphor-react";
 
 function App() {
-  const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("todoList")) || "[]"
-  );
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    setTodos(JSON.parse(localStorage.getItem("todoList")) || []);
+  }, []);
 
   const [newTask, setNewTask] = useState(null);
 
