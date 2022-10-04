@@ -134,9 +134,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-.todo-item div span {
-  margin-left: 8px;
+  gap: 8px;
 }
 .btn-icon {
   background-color: transparent;
@@ -153,4 +151,67 @@ body {
   font-weight: 300;
   font-size: 14px;
   text-align: center;
+}
+
+.accordion-item {
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  margin-bottom: 8px;
+  background-color: #212121;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+.accordion-header {
+  display: flex;
+  flex-direction: row;
+  font-weight: 400;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.accordion-header div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.accordion-trigger {
+  font-weight: 500;
+  font-size: 16px;
+  background-color: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.accordion-content {
+  margin-top: 16px;
+  color: #fff;
+  padding: 0;
+}
+.form-task {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.form-task input {
+  background-color: transparent;
+  width: 100%;
+  caret-color: #fff;
+  border: 2px solid #444;
+  padding: 8px;
+  border-radius: 4px;
+  transition: 0.5s;
+  color: #fff;
+  font-size: 14px;
+}
+.form-task button {
+  background-color: #228b22;
+  padding: 4px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
 }
