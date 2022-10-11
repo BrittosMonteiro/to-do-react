@@ -43,7 +43,10 @@ export default function List() {
       {tasks.length > 0 ? (
         <ol className="list gap-4">
           {tasks.map((task) => (
-            <li className="list-item pa-4 justify-content-between border-radius-soft">
+            <li
+              className="list-item pa-4 justify-content-between border-radius-soft"
+              key={task.id}
+            >
               <div className="gap-2">
                 <button type="button" className="btn-icon">
                   <Circle
