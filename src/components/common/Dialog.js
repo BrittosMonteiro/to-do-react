@@ -45,7 +45,7 @@ export default function TaskDialog(props) {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   function getById(id) {
@@ -112,8 +112,22 @@ export default function TaskDialog(props) {
   }, [items]);
 
   useEffect(() => {
+    if (!task.items.length > 0) return;
+
+    let list = task.items.split(",");
+    setItems(list);
+  }, [task]);
+
+  useEffect(() => {
     setChecklist(checklist);
   }, [checklist]);
+
+  useEffect(() => {
+    if (!task.checklist.length > 0) return;
+
+    let list = task.checklist.split(",");
+    setChecklist(list);
+  }, [task]);
 
   return (
     <Dialog.Portal>
