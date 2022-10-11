@@ -1,0 +1,32 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.list-item {
+    display: flex;
+    flex-direction: row;
+    transition: 0.4s;
+    background-color: $dark-2;
+
+    &:hover {
+        background-color: $bg-transparent;
+    }
+
+    div {
+        display: flex;
+        flex-direction: row;
+
+        button {
+            background-color: $bg-transparent;
+            color: $white-1;
+            cursor: pointer;
+        }
+    }
+}
+
+.no-data {
+    background-color: $dark-2;
+    color: $white-1;
+}
