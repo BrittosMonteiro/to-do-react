@@ -1,133 +1,60 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  Square,
-  ListPlus,
-  PencilSimple,
-  Check,
-  X,
-  Trash,
-} from "phosphor-react";
-import {
-  createTask,
-  getTaskById,
-  updateTask,
-} from "../../service/task-service";
-import { getStatus } from "../../service/status-service";
+import { ListPlus, PencilSimple, Check, X } from "phosphor-react";
 import { useEffect, useState } from "react";
+import { useTodoOptions } from "../../context/TodoContext";
 
-export default function TaskDialog(props) {
-  const taskDefault = {
-    title: "",
-    date_start: "",
-    date_end: "",
-    time_total: "",
-    items: [],
-    checklist: [],
-    notes: "",
-  };
+export default function TaskDialog({ taskDetail }) {
+  const [taskStatus, setTaskStatus] = useState(0);
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskStartDate, setTaskStartDate] = useState("");
+  const [taskEndDate, setTaskEndDate] = useState("");
+  const [taskTotalTime, setTaskTotalTime] = useState("");
+  const [taskItems, setTaskItems] = useState([]);
+  const [taskCheckList, setTaskCheckList] = useState([]);
+  const [taskNotes, setTaskNotes] = useState("");
+  const { addItemToTodoList } = useTodoOptions();
 
-  const [taskId, setTaskId] = useState(null);
+  useEffect(() => {
+    if (taskDetail) {
+      setTaskTitle(taskDetail.title);
+      setTaskStartDate(taskDetail.startDate);
+      setTaskEndDate(taskDetail.endDate);
+      setTaskTotalTime(taskDetail.totalTime);
+      setTaskItems(taskDetail.items);
+      setTaskCheckList(taskDetail.checkList);
+      setTaskNotes(taskDetail.notes);
+    }
+  }, [taskDetail]);
 
-  const [status, setStatus] = useState([]);
-  const [task, setTask] = useState(taskDefault);
-
-  const [items, setItems] = useState(taskDefault.items);
-  const [newItem, setNewItem] = useState("");
-
-  const [checklist, setChecklist] = useState(taskDefault.checklist);
-  const [newChecklistItem, setNewChecklistItem] = useState("");
-
-  function getStatusList() {
-    getStatus()
-      .then((res) => res.json())
-      .then((res) => {
-        setStatus(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function getById(id) {
-    getTaskById(id)
-      .then((res) => res.json())
-      .then((res) => {
-        setTask(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  const status = [
+    {
+      id: 1,
+      title: "Em andamento",
+    },
+    {
+      id: 2,
+      title: "Concluído",
+    },
+    {
+      id: 3,
+      title: "Cancelado",
+    },
+  ];
 
   function handleTask(e) {
     e.preventDefault();
     const data = {
-      statusId: e.target.task_status.value,
-      title: e.target.task_title.value,
-      date_start: e.target.task_date_start.value,
-      date_end: e.target.task_date_end.value,
-      time_total: e.target.task_time_total.value,
-      items: items,
-      checklist: checklist,
-      notes: e.target.task_notes.value,
+      status: taskStatus,
+      title: taskTitle,
+      startDate: taskStartDate,
+      endDate: taskEndDate,
+      totalTime: taskTotalTime,
+      items: taskItems,
+      checkList: taskCheckList,
+      notes: taskNotes,
     };
-
-    if (task.id) {
-      updateTask(data);
-    } else {
-      createTask(data)
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    addItemToTodoList(data);
   }
-
-  useEffect(() => {
-    getStatusList();
-  }, []);
-
-  useEffect(() => {
-    setTaskId(props.id);
-    if (taskId) {
-      getById(taskId);
-    }
-  }, [taskId, props.id]);
-
-  function addItemToItemsList(data) {
-    if (!data) return;
-    items.unshift(data);
-  }
-
-  function addItemToChecklist(data) {
-    if (!data) return;
-    checklist.unshift(data);
-  }
-
-  useEffect(() => {
-    setItems(items);
-  }, [items]);
-
-  useEffect(() => {
-    if (!task.items.length > 0) return;
-
-    let list = task.items.split(",");
-    setItems(list);
-  }, [task]);
-
-  useEffect(() => {
-    setChecklist(checklist);
-  }, [checklist]);
-
-  useEffect(() => {
-    if (!task.checklist.length > 0) return;
-
-    let list = task.checklist.split(",");
-    setChecklist(list);
-  }, [task]);
 
   return (
     <Dialog.Portal>
@@ -139,7 +66,8 @@ export default function TaskDialog(props) {
                 name="task_status"
                 id="task_status"
                 className="border-radius-soft"
-                defaultValue={task.status}
+                value={taskStatus}
+                onChange={(status) => setTaskStatus(status.target.value)}
               >
                 <option value="">Status</option>
                 {status.map((item) => (
@@ -157,7 +85,8 @@ export default function TaskDialog(props) {
                 id="task_title"
                 placeholder="Título"
                 className="input py-2 mt-2 font-md border-radius-soft"
-                defaultValue={task.title}
+                value={taskTitle}
+                onChange={(title) => setTaskTitle(title.target.value)}
               />
               <button type="button" className="btn">
                 <PencilSimple className="icon-default icon-white-1" />
@@ -175,7 +104,10 @@ export default function TaskDialog(props) {
                   id="task_date_start"
                   placeholder="Data de início"
                   className="input pa-2 font-sm text-center border-radius-soft border-default"
-                  defaultValue={task.date_start}
+                  value={taskStartDate}
+                  onChange={(startDate) =>
+                    setTaskStartDate(startDate.target.value)
+                  }
                 />
               </div>
 
@@ -187,7 +119,8 @@ export default function TaskDialog(props) {
                   id="task_date_end"
                   placeholder="Data de fim"
                   className="input pa-2 font-sm text-center border-radius-soft border-default"
-                  defaultValue={task.date_end}
+                  value={taskEndDate}
+                  onChange={(endDate) => setTaskEndDate(endDate.target.value)}
                 />
               </div>
 
@@ -201,7 +134,10 @@ export default function TaskDialog(props) {
                   min={0}
                   max={8}
                   className="input pa-2 font-sm text-center border-radius-soft border-default"
-                  defaultValue={task.time_total}
+                  value={taskTotalTime}
+                  onChange={(totalTime) =>
+                    setTaskTotalTime(totalTime.target.value)
+                  }
                 />
               </div>
             </div>
@@ -217,28 +153,23 @@ export default function TaskDialog(props) {
                   id="task_new_list_item"
                   placeholder="Adicionar novo item"
                   className="input pa-2 font-sm mt-2 border-radius-soft border-default"
-                  onChange={(e) => setNewItem(e.target.value)}
                 />
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => addItemToItemsList(newItem)}
-                >
+                <button type="button" className="btn">
                   <ListPlus className="icon-default icon-white-1" />
                 </button>
               </div>
-              {items.length > 0 ? (
+              {/* {taskItems.length > 0 ? (
                 <ol className="list">
-                  {items.map((item, key) => (
-                    <li key={key}>
-                      <span>{item}</span>
+                  {taskItems.map((item, index) => (
+                    <li key={index}>
+                      <span>{item.title}</span>
                       <button type="button" className="btn">
                         <Trash className="icon-default icon-red-1" />
                       </button>
                     </li>
                   ))}
                 </ol>
-              ) : null}
+              ) : null} */}
             </div>
 
             <hr />
@@ -252,31 +183,26 @@ export default function TaskDialog(props) {
                   id="task_new_checklist_item"
                   placeholder="Adicionar novo item"
                   className="input pa-2 font-sm mt-2 border-radius-soft border-default"
-                  onChange={(e) => setNewChecklistItem(e.target.value)}
                 />
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => addItemToChecklist(newChecklistItem)}
-                >
+                <button type="button" className="btn">
                   <ListPlus className="icon-default icon-white-1" />
                 </button>
               </div>
-              {checklist.length > 0 ? (
+              {/* {taskCheckList.length > 0 ? (
                 <ol className="list">
-                  {checklist.map((item, key) => (
-                    <li key={key}>
+                  {taskCheckList.map((item, index) => (
+                    <li key={index}>
                       <button type="button" className="btn">
                         <Square className="icon-default icon-white-1" />
                       </button>
-                      <span>{item}</span>
+                      <span></span>
                       <button type="button" className="btn">
                         <Trash className="icon-default icon-red-1" />
                       </button>
                     </li>
                   ))}
                 </ol>
-              ) : null}
+              ) : null} */}
             </div>
 
             <hr />
@@ -286,7 +212,8 @@ export default function TaskDialog(props) {
               id="task_notes"
               placeholder="Anotações"
               className="note font-sm mt-4 pa-2 border-radius-soft border-default"
-              defaultValue={task.notes}
+              value={taskNotes}
+              onChange={(notes) => setTaskNotes(notes.target.value)}
             />
 
             <div className="row justify-content-between mt-4">
