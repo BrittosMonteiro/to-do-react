@@ -177,9 +177,9 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   defaultValue={taskTitle}
                   onChange={(title) => setTaskTitle(title.target.value)}
                 />
-                {/* <button type="button" className="btn">
+                <button type="button" className="btn-icon align-items-center">
                   <PencilSimple className="icon-default icon-white-1" />
-                </button> */}
+                </button>
               </div>
               <hr />
 
