@@ -102,7 +102,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
     const newList = taskCheckList;
     newList[id] = updateStatus;
 
-    setNewItemInCheckList([...newList]);
+    setTaskCheckList([...newList]);
   }
 
   function removeItemFromItemList(id) {
@@ -233,13 +233,13 @@ export default function Modal({ taskDetail, id, open, onClose }) {
               <hr />
 
               <div className="column mt-4">
-                <label htmlFor="task_items">Itens</label>
+                <label htmlFor="task_items">Lembretes</label>
                 <div className="row gap-2 align-items-center">
                   <input
                     type={"text"}
                     name="task_new_list_item"
                     id="task_new_list_item"
-                    placeholder="Adicionar novo item"
+                    placeholder="Adicionar lembrete"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
                     defaultValue={newItemInItemList}
                     onChange={(e) => setNewItemInItemList(e.target.value)}
@@ -278,7 +278,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                     type={"text"}
                     name="task_new_checklist_item"
                     id="task_new_checklist_item"
-                    placeholder="Adicionar novo item"
+                    placeholder="Adicionar item"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
                     defaultValue={newItemInCheckList}
                     onChange={(e) => setNewItemInCheckList(e.target.value)}

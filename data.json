@@ -6,25 +6,10 @@
       "startDate": "2022-12-26",
       "endDate": "2022-12-30",
       "totalTime": "2",
-      "items": [
-        {
-          "title": "Estudar em um lugar silencioso"
-        },
-        {
-          "title": "Sem celular por perto"
-        }
-      ],
+      "items": [],
       "checkList": [
         {
-          "title": "Router",
-          "status": false
-        },
-        {
-          "title": "Hooks",
-          "status": false
-        },
-        {
-          "title": "Context",
+          "title": "Mais um item",
           "status": false
         }
       ],
