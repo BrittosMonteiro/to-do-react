@@ -24,7 +24,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
   const [newItemInItemList, setNewItemInItemList] = useState("");
   const [newItemInCheckList, setNewItemInCheckList] = useState("");
 
-  const { addItemToTodoList } = useTodoOptions();
+  const { addItemToTodoList, manageUpdateTask } = useTodoOptions();
 
   useEffect(() => {
     if (taskDetail) {
@@ -58,7 +58,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
   function manageTask(e) {
     e.preventDefault();
     let data = {
-      status: taskStatus,
+      status: parseInt(taskStatus),
       title: taskTitle,
       startDate: taskStartDate,
       endDate: taskEndDate,
@@ -70,8 +70,10 @@ export default function Modal({ taskDetail, id, open, onClose }) {
 
     if (taskDetail) {
       data = { ...data, id: taskId };
+      manageUpdateTask(data);
+    } else {
+      addItemToTodoList(data);
     }
-    addItemToTodoList(data);
     onClose();
     clearFormField();
   }
@@ -175,9 +177,9 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   defaultValue={taskTitle}
                   onChange={(title) => setTaskTitle(title.target.value)}
                 />
-                <button type="button" className="btn">
+                {/* <button type="button" className="btn">
                   <PencilSimple className="icon-default icon-white-1" />
-                </button>
+                </button> */}
               </div>
               <hr />
 
@@ -366,7 +368,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   }}
                 >
                   <Check className="icon-default icon-white-1" />
-                  {id ? "Atualizar" : "Salvar"} {id}
+                  {taskDetail?.id ? "Atualizar" : "Salvar"}
                 </button>
               </div>
             </form>

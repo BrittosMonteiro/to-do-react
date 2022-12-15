@@ -1,4 +1,11 @@
-import { useState, useContext, createContext } from "react";
+import { useState, useContext, createContext, useEffect } from "react";
+import {
+  createTask,
+  deleteTask,
+  readTaskList,
+  updateTask,
+  updateTaskStatus,
+} from "../services/taskServices";
 const TodoContext = createContext(null);
 
 export function useTodoOptions() {
@@ -6,63 +13,95 @@ export function useTodoOptions() {
 }
 
 export function TodoProvider({ children }) {
-  let todo = JSON.parse(localStorage.getItem("todoList") || "[]");
   const [displayModal, setDisplayModal] = useState(false);
-  const [reloadList, setReloadList] = useState(false);
-  const [todoList, setTodoList] = useState(todo);
+  const [todoList, setTodoList] = useState([]);
 
-  function addItemToTodoList(newTask) {
-    todo.unshift(newTask);
-    localStorage.setItem("todoList", JSON.stringify(todo));
-    setTodoList(todo);
-    displayModalOnScreen(false);
-    reloadTodoList(true);
+  function loadItemsList() {
+    readTaskList()
+      .then((res) => res.json())
+      .then((res) => {
+        setTodoList(res);
+      })
+      .catch((err) => console.log(err));
   }
 
-  function switchItemStatus(key) {
-    if (todo[key].statusId === 1) {
-      todo[key].statusId = 2;
-    } else {
-      todo[key].statusId = 1;
-    }
+  useEffect(() => {
+    loadItemsList();
+  }, []);
 
-    localStorage.setItem("todoList", JSON.stringify(todo));
-    setTodoList(todo);
+  function addItemToTodoList(newTask) {
+    createTask(newTask)
+      .then((res) => res.json())
+      .then((res) => {
+        setTodoList([res, ...todoList]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        displayModalOnScreen(false);
+      });
+  }
+
+  function manageUpdateTask(task) {
+    updateTask(task)
+      .then(() => {
+        loadItemsList();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        displayModalOnScreen(false);
+      });
+  }
+
+  function switchItemStatus(taskId, status) {
+    if (status === 0 || status === 1) {
+      updatetatus(taskId, 2);
+    } else {
+      if (status >= 3) {
+        updatetatus(taskId, 1);
+      } else {
+        updatetatus(taskId, status + 1);
+      }
+    }
+  }
+
+  function updatetatus(taskId, status) {
+    updateTaskStatus(taskId, status)
+      .then(() => {
+        loadItemsList();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function removeItemFromTodoList(key) {
-    todo.splice(key, 1);
-    localStorage.setItem("todoList", JSON.stringify(todo));
-    setTodoList(todo);
-    reloadTodoList(true);
+    deleteTask(key)
+      .then(() => {
+        loadItemsList();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  function clearTodoList() {
-    todo.length = 0;
-    localStorage.removeItem("todoList");
-    setTodoList(todo);
-  }
+  function clearTodoList() {}
 
-  function login(userData) {
-    console.log(userData);
-  }
+  function login(userData) {}
 
-  function logout(userData) {
-    console.log(userData);
-  }
+  function logout(userData) {}
 
   function displayModalOnScreen(state) {
     setDisplayModal(state);
   }
 
-  function reloadTodoList(state) {
-    setReloadList(state);
-  }
-
   const todoStates = {
     todoList,
-    reloadList,
     addItemToTodoList,
+    manageUpdateTask,
     switchItemStatus,
     removeItemFromTodoList,
     clearTodoList,

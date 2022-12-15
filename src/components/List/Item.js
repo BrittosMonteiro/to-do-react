@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Circle, CheckCircle, Trash } from "phosphor-react";
+import { Circle, CheckCircle, Trash, XCircle } from "phosphor-react";
 
 import { useTodoOptions } from "../../context/TodoContext";
 import Modal from "../common/Modal";
 
-export default function Item({ task, id }) {
+export default function Item({ task }) {
   const [open, setOpen] = useState(false);
   const { removeItemFromTodoList, switchItemStatus } = useTodoOptions();
 
@@ -12,8 +12,8 @@ export default function Item({ task, id }) {
     removeItemFromTodoList(id);
   }
 
-  function changeItemStatus() {
-    switchItemStatus();
+  function changeItemStatus(taskId, status) {
+    switchItemStatus(taskId, status);
   }
 
   function closeModal() {
@@ -24,15 +24,22 @@ export default function Item({ task, id }) {
     <li className="list-item pa-4 justify-content-between border-radius-soft">
       <div className="gap-2">
         <button type="button" className="btn-icon">
-          {task.statusId === 1 ? (
+          {(!task.status || task.status === 0 || task.status === 1) && (
             <Circle
               className="icon-default icon-white-1"
-              onClick={() => changeItemStatus()}
+              onClick={() => changeItemStatus(task.id, task.status)}
             />
-          ) : (
+          )}
+          {task.status === 2 && (
             <CheckCircle
               className="icon-default icon-white-1"
-              onClick={() => changeItemStatus()}
+              onClick={() => changeItemStatus(task.id, task.status)}
+            />
+          )}
+          {task.status === 3 && (
+            <XCircle
+              className="icon-default icon-white-1"
+              onClick={() => changeItemStatus(task.id, task.status)}
             />
           )}
         </button>
@@ -43,19 +50,13 @@ export default function Item({ task, id }) {
         >
           {task.title}
         </span>
-        <Modal taskDetail={task} id={id} open={open} onClose={closeModal} />
-        {/* <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Trigger className="font-sm font-medium">
-            {task.taskTitle}
-          </Dialog.Trigger>
-          <TaskDialog taskDetail={task} />
-        </Dialog.Root> */}
+        <Modal taskDetail={task} open={open} onClose={closeModal} />
       </div>
 
       <button
         type="button"
         className="btn-icon"
-        onClick={() => deleteItemFromList(id)}
+        onClick={() => deleteItemFromList(task.id)}
       >
         <Trash className="icon-default icon-red-1" />
       </button>
