@@ -19,80 +19,39 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 450px;
+    max-width: 650px;
     margin: auto auto;
     padding: 16px;
     border-radius: 2px;
-    background-color: #333333;
+    background-color: $white-1;
     box-shadow: 0px 0px 15px 5px $dark-shadow-2;
     border-radius: 2px;
-}
 
-form {
-    select {
-        border: 1px solid $white-1;
-        background-color: $bg-transparent;
-        color: $white-1;
-        padding: 4px 8px;
-    }
-
-    hr {
+    .row {
+        display: flex;
+        flex-direction: row;
         width: 100%;
-        height: 1px;
-        background-color: $dark-5;
-        margin-top: 16px;
     }
 
-    .column{
-        label {
-            font-weight: $font-weight-light;
-        }
-    }
-
-    .list {
+    .column {
         display: flex;
         flex-direction: column;
-
-        li {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            margin-top: 8px;
-            gap: 8px;
-
-            span {
-                font-size: $font-sm;
-                font-weight: $font-weight-medium;
-                width: 100%;
-            }
-        }
+        width: 100%;
     }
 
-    .note {
-        min-height: 100px;
+    input {
+        display: flex;
+        width: 100%;
+    }
+
+    textarea {
         resize: none;
+        min-height: 100px;
     }
-
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
+hr {
     width: 100%;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    font-size: $font-sm;
-    gap: 8px;
-    color: $white-1;
-}
-
-.input, .note{
-    background-color: $bg-transparent;
-    color: $white-1;
-    font-weight: $font-weight-regular;
-    width: 100%;
+    height: 1px;
+    background-color: $gray-c;
 }

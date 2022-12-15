@@ -2,28 +2,25 @@
   "tasks": [
     {
       "status": 1,
-      "title": "Estudar React.JS",
-      "startDate": "2022-12-23",
-      "endDate": "2023-01-12",
+      "title": "Estudar ReactJS",
+      "startDate": "2022-12-26",
+      "endDate": "2022-12-30",
       "totalTime": "2",
       "items": [
         {
-          "title": "Musica relaxante"
+          "title": "Estudar em um lugar silencioso"
         },
         {
-          "title": "Longe de distrações"
-        },
-        {
-          "title": "Sem celular"
+          "title": "Sem celular por perto"
         }
       ],
       "checkList": [
         {
-          "title": "Hooks",
+          "title": "Router",
           "status": false
         },
         {
-          "title": "Router",
+          "title": "Hooks",
           "status": false
         },
         {
@@ -31,7 +28,7 @@
           "status": false
         }
       ],
-      "notes": "Pausas para lanche",
+      "notes": "Estudar após finalizar o expediente.",
       "id": 1
     }
   ]

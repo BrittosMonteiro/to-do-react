@@ -33,10 +33,3 @@ $icon-lg: 32px;
 .icon-lg {
     @include icon($icon-lg, $icon-lg);
 }
-
-.btn-icon {
-    background-color: transparent;
-    font-size: initial;
-    cursor: pointer;
-    display: flex;
-  }

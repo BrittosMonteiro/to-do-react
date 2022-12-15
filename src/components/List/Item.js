@@ -22,7 +22,7 @@ export default function Item({ task }) {
 
   return (
     <li className="list-item pa-4 justify-content-between border-radius-soft">
-      <div className="gap-2">
+      <div className="row gap-2">
         <button type="button" className="btn-icon">
           {(!task.status || task.status === 0 || task.status === 1) && (
             <Circle
