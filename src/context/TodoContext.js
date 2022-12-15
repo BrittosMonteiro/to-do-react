@@ -25,10 +25,6 @@ export function TodoProvider({ children }) {
       .catch((err) => console.log(err));
   }
 
-  useEffect(() => {
-    loadItemsList();
-  }, []);
-
   function addItemToTodoList(newTask) {
     createTask(newTask)
       .then((res) => res.json())
@@ -88,15 +84,19 @@ export function TodoProvider({ children }) {
       });
   }
 
+  function displayModalOnScreen(state) {
+    setDisplayModal(state);
+  }
+
   function clearTodoList() {}
 
   function login(userData) {}
 
   function logout(userData) {}
 
-  function displayModalOnScreen(state) {
-    setDisplayModal(state);
-  }
+  useEffect(() => {
+    loadItemsList();
+  }, []);
 
   const todoStates = {
     todoList,
