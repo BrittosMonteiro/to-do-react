@@ -5,7 +5,7 @@ import { TodoProvider } from "./context/TodoContext";
 function App() {
   return (
     <div className="app">
-      <div className="todos">
+      <div className="container py-8 px-4">
         <TodoProvider>
           <Header />
           <List />

@@ -17,12 +17,12 @@ export default function Header() {
   }
 
   return (
-    <header className="header">
-      <h1 className="page-title">TOO-DO</h1>
+    <header className="header mb-8">
+      <h1 className="text-white-1 font-lg font-regular">TOO-DO</h1>
       <span
-        className="font-sm font-medium"
+        className="font-sm font-medium text-white-1 btn"
         onClick={() => setOpen(true)}
-        style={{ color: "white", cursor: "pointer" }}
+        style={{ cursor: "pointer" }}
       >
         ADICIONAR TAREFA
       </span>

@@ -246,7 +246,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   />
                   <button
                     type="button"
-                    className="btn"
+                    className="btn-icon"
                     onClick={() => addItemToItemList()}
                   >
                     <ListPlus className="icon-default icon-white-1" />
@@ -257,7 +257,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                     {taskItems.map((item, index) => (
                       <li key={index}>
                         <span>{item.title}</span>
-                        <button type="button" className="btn">
+                        <button type="button" className="btn-icon">
                           <Trash
                             className="icon-default icon-red-1"
                             onClick={() => removeItemFromItemList(index)}
@@ -285,7 +285,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   />
                   <button
                     type="button"
-                    className="btn"
+                    className="btn-icon"
                     onClick={() => addItemToCheckList()}
                   >
                     <ListPlus className="icon-default icon-white-1" />
@@ -295,7 +295,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                   <ol className="list">
                     {taskCheckList.map((item, index) => (
                       <li key={index}>
-                        <button type="button" className="btn">
+                        <button type="button" className="btn-icon">
                           {!item.status ? (
                             <Square
                               className="icon-default icon-white-1"
@@ -309,7 +309,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                           )}
                         </button>
                         <span>{item.title}</span>
-                        <button type="button" className="btn">
+                        <button type="button" className="btn-icon">
                           <Trash
                             className="icon-default icon-red-1"
                             onClick={() => removeItemFromCheckList(index)}
