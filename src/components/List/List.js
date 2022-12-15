@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useTodoOptions } from "../../context/TodoContext";
 import Item from "./Item";
+
 export default function List() {
-  const { todoList } = useTodoOptions();
   const [tasksList, setTasksList] = useState([]);
+
+  const { todoList } = useTodoOptions();
 
   useEffect(() => {
     setTasksList(todoList);
@@ -14,7 +16,7 @@ export default function List() {
       {tasksList.length > 0 ? (
         <ol className="list gap-4">
           {tasksList.map((task, key) => (
-            <Item key={key} task={task} />
+            <Item key={key} task={task} id={key} />
           ))}
         </ol>
       ) : (

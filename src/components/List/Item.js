@@ -4,12 +4,12 @@ import { Circle, CheckCircle, Trash } from "phosphor-react";
 import { useTodoOptions } from "../../context/TodoContext";
 import Modal from "../common/Modal";
 
-export default function Item({ task }) {
+export default function Item({ task, id }) {
   const [open, setOpen] = useState(false);
   const { removeItemFromTodoList, switchItemStatus } = useTodoOptions();
 
-  function deleteItemFromList() {
-    removeItemFromTodoList();
+  function deleteItemFromList(id) {
+    removeItemFromTodoList(id);
   }
 
   function changeItemStatus() {
@@ -43,7 +43,7 @@ export default function Item({ task }) {
         >
           {task.title}
         </span>
-        <Modal taskDetail={task} open={open} onClose={closeModal} />
+        <Modal taskDetail={task} id={id} open={open} onClose={closeModal} />
         {/* <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger className="font-sm font-medium">
             {task.taskTitle}
@@ -55,7 +55,7 @@ export default function Item({ task }) {
       <button
         type="button"
         className="btn-icon"
-        onClick={() => deleteItemFromList()}
+        onClick={() => deleteItemFromList(id)}
       >
         <Trash className="icon-default icon-red-1" />
       </button>

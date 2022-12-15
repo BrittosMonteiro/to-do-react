@@ -6,10 +6,11 @@ import {
   Check,
   X,
   Trash,
+  CheckSquare,
 } from "phosphor-react";
 import { useTodoOptions } from "../../context/TodoContext";
 
-export default function Modal({ taskDetail, open, onClose }) {
+export default function Modal({ taskDetail, id, open, onClose }) {
   const [taskId, setTaskId] = useState(null);
   const [taskStatus, setTaskStatus] = useState(0);
   const [taskTitle, setTaskTitle] = useState("");
@@ -19,6 +20,10 @@ export default function Modal({ taskDetail, open, onClose }) {
   const [taskItems, setTaskItems] = useState([]);
   const [taskCheckList, setTaskCheckList] = useState([]);
   const [taskNotes, setTaskNotes] = useState("");
+
+  const [newItemInItemList, setNewItemInItemList] = useState("");
+  const [newItemInCheckList, setNewItemInCheckList] = useState("");
+
   const { addItemToTodoList } = useTodoOptions();
 
   useEffect(() => {
@@ -68,11 +73,73 @@ export default function Modal({ taskDetail, open, onClose }) {
     }
     addItemToTodoList(data);
     onClose();
+    clearFormField();
   }
+
+  function addItemToItemList() {
+    if (!newItemInItemList) return;
+    const newItem = {
+      title: newItemInItemList,
+    };
+    setTaskItems([...taskItems, newItem]);
+  }
+
+  function addItemToCheckList() {
+    if (!newItemInCheckList) return;
+    const newItem = {
+      title: newItemInCheckList,
+      status: false,
+    };
+    setTaskCheckList([...taskCheckList, newItem]);
+  }
+
+  function changeItemStatusOnCheckList(id) {
+    const updateStatus = taskCheckList[id];
+    updateStatus.status = !updateStatus.status;
+
+    const newList = taskCheckList;
+    newList[id] = updateStatus;
+
+    setNewItemInCheckList([...newList]);
+  }
+
+  function removeItemFromItemList(id) {
+    let newList = taskItems;
+    newList.splice(id, 1);
+    setTaskItems([...newList]);
+  }
+
+  function removeItemFromCheckList(id) {
+    let newList = taskCheckList;
+    newList.splice(id, 1);
+    setTaskCheckList([...newList]);
+  }
+
+  useEffect(() => {
+    setTaskItems(taskItems);
+    setNewItemInItemList("");
+  }, [taskItems]);
+
+  useEffect(() => {
+    setTaskCheckList(taskCheckList);
+    setNewItemInCheckList("");
+  }, [taskCheckList]);
 
   function closeModal(e) {
     const elementId = e.target.id === "overlay";
     if (elementId) onClose();
+  }
+
+  function clearFormField() {
+    setTaskId(null);
+    setTaskTitle("");
+    setTaskStatus(0);
+    setTaskStartDate("");
+    setTaskEndDate("");
+    setTaskTotalTime("");
+    setTaskItems("");
+    setTaskCheckList("");
+    setTaskNotes("");
   }
 
   return (
@@ -172,8 +239,14 @@ export default function Modal({ taskDetail, open, onClose }) {
                     id="task_new_list_item"
                     placeholder="Adicionar novo item"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
+                    defaultValue={newItemInItemList}
+                    onChange={(e) => setNewItemInItemList(e.target.value)}
                   />
-                  <button type="button" className="btn">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => addItemToItemList()}
+                  >
                     <ListPlus className="icon-default icon-white-1" />
                   </button>
                 </div>
@@ -183,7 +256,10 @@ export default function Modal({ taskDetail, open, onClose }) {
                       <li key={index}>
                         <span>{item.title}</span>
                         <button type="button" className="btn">
-                          <Trash className="icon-default icon-red-1" />
+                          <Trash
+                            className="icon-default icon-red-1"
+                            onClick={() => removeItemFromItemList(index)}
+                          />
                         </button>
                       </li>
                     ))}
@@ -202,8 +278,14 @@ export default function Modal({ taskDetail, open, onClose }) {
                     id="task_new_checklist_item"
                     placeholder="Adicionar novo item"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
+                    defaultValue={newItemInCheckList}
+                    onChange={(e) => setNewItemInCheckList(e.target.value)}
                   />
-                  <button type="button" className="btn">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => addItemToCheckList()}
+                  >
                     <ListPlus className="icon-default icon-white-1" />
                   </button>
                 </div>
@@ -212,11 +294,24 @@ export default function Modal({ taskDetail, open, onClose }) {
                     {taskCheckList.map((item, index) => (
                       <li key={index}>
                         <button type="button" className="btn">
-                          <Square className="icon-default icon-white-1" />
+                          {!item.status ? (
+                            <Square
+                              className="icon-default icon-white-1"
+                              onClick={() => changeItemStatusOnCheckList(index)}
+                            />
+                          ) : (
+                            <CheckSquare
+                              className="icon-default icon-white-1"
+                              onClick={() => changeItemStatusOnCheckList(index)}
+                            />
+                          )}
                         </button>
-                        <span></span>
+                        <span>{item.title}</span>
                         <button type="button" className="btn">
-                          <Trash className="icon-default icon-red-1" />
+                          <Trash
+                            className="icon-default icon-red-1"
+                            onClick={() => removeItemFromCheckList(index)}
+                          />
                         </button>
                       </li>
                     ))}
@@ -271,7 +366,7 @@ export default function Modal({ taskDetail, open, onClose }) {
                   }}
                 >
                   <Check className="icon-default icon-white-1" />
-                  Salvar
+                  {id ? "Atualizar" : "Salvar"} {id}
                 </button>
               </div>
             </form>
