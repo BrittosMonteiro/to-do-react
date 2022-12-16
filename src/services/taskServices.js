@@ -1,9 +1,9 @@
 let API_URL = "";
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:3050/";
+  API_URL = "http://localhost:3050/tasks/";
 } else {
-  API_URL = "https://server-to-do-react.vercel.app/";
+  API_URL = "https://server-to-do-react.vercel.app/tasks/";
 }
 
 export async function createTask(data) {
