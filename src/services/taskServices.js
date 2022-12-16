@@ -1,39 +1,47 @@
-const API_URL = "http://localhost:3050/tasks";
+let API_URL = "";
 
-export function createTask(data) {
-  return fetch(API_URL, {
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  API_URL = "http://localhost:3050/tasks/";
+} else {
+  API_URL = "https://server-to-do-react.vercel.app/";
+}
+
+export async function createTask(data) {
+  return await fetch(API_URL, {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(data),
   });
 }
 
-export function readTaskList() {
-  return fetch(`${API_URL}?_sort=id&_order=desc`);
+export async function readTaskList() {
+  return await fetch(`${API_URL}`, { method: "GET" });
 }
 
-export function readTaskListById(id) {
-  return fetch(`${API_URL}/${id}`);
+export async function readTaskListById(id) {
+  return await fetch(`${API_URL}/${id}`);
 }
 
-export function updateTask(data) {
-  return fetch(`${API_URL}/${data.id}`, {
+export async function updateTask(data) {
+  return await fetch(`${API_URL}`, {
     method: "PUT",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(data),
   });
 }
 
-export function updateTaskStatus(id, status) {
-  return fetch(`${API_URL}/${id}`, {
+export async function updateTaskStatus(id, status) {
+  return await fetch(`${API_URL}`, {
     method: "PATCH",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ status }),
   });
 }
 
-export function deleteTask(id) {
-  return fetch(`${API_URL}/${id}`, {
+export async function deleteTask(id) {
+  return await fetch(`${API_URL}/deleteTask`, {
     method: "DELETE",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(id),
   });
 }

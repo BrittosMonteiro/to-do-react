@@ -83,7 +83,7 @@ export function TodoProvider({ children }) {
   }
 
   function removeItemFromTodoList(key) {
-    deleteTask(key)
+    deleteTask({id: key})
       .then(() => {
         loadItemsList();
         toggleSnackbar("Task excluída", "success", true);
