@@ -1,7 +1,7 @@
 let API_URL = "";
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:3050/tasks/";
+  API_URL = "http://localhost:3050/";
 } else {
   API_URL = "https://server-to-do-react.vercel.app/";
 }
