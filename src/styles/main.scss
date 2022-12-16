@@ -9,6 +9,7 @@
 @import 'Dialog';
 @import 'Text';
 @import 'Filter';
+@import 'Snackbar';
 
 * {
   padding: 0;
@@ -54,4 +55,8 @@ div[role='menuitem'] {
   max-width: 750px;
   height: 100%;
   margin: 0 auto;
+}
+
+.hide {
+  display: none;
 }

@@ -84,6 +84,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
       title: newItemInItemList,
     };
     setTaskItems([...taskItems, newItem]);
+    setNewItemInItemList("");
   }
 
   function addItemToCheckList() {
@@ -93,6 +94,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
       status: false,
     };
     setTaskCheckList([...taskCheckList, newItem]);
+    setNewItemInCheckList("");
   }
 
   function changeItemStatusOnCheckList(id) {
@@ -119,12 +121,10 @@ export default function Modal({ taskDetail, id, open, onClose }) {
 
   useEffect(() => {
     setTaskItems(taskItems);
-    setNewItemInItemList("");
   }, [taskItems]);
 
   useEffect(() => {
     setTaskCheckList(taskCheckList);
-    setNewItemInCheckList("");
   }, [taskCheckList]);
 
   function closeModal(e) {
@@ -241,7 +241,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                     id="task_new_list_item"
                     placeholder="Adicionar lembrete"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
-                    defaultValue={newItemInItemList}
+                    value={newItemInItemList}
                     onChange={(e) => setNewItemInItemList(e.target.value)}
                   />
                   <button
@@ -280,7 +280,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
                     id="task_new_checklist_item"
                     placeholder="Adicionar item"
                     className="input pa-2 font-sm mt-2 border-radius-soft border-default"
-                    defaultValue={newItemInCheckList}
+                    value={newItemInCheckList}
                     onChange={(e) => setNewItemInCheckList(e.target.value)}
                   />
                   <button

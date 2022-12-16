@@ -1,15 +1,20 @@
 import Header from "./components/common/Header";
+import Snackbar from "./components/common/Snackbar";
 import List from "./components/List/List";
-import { TodoProvider } from "./context/TodoContext";
+import { useTodoOptions } from "./context/TodoContext";
 
 function App() {
+  const { snackColor, snackDisplay, snackMessage } = useTodoOptions();
   return (
     <div className="app">
       <div className="container py-8 px-4">
-        <TodoProvider>
-          <Header />
-          <List />
-        </TodoProvider>
+        <Header />
+        <List />
+        <Snackbar
+          color={snackColor}
+          display={snackDisplay}
+          message={snackMessage}
+        />
       </div>
     </div>
   );
