@@ -75,6 +75,7 @@ export function TodoProvider({ children }) {
     updateTaskStatus(taskId, status)
       .then(() => {
         loadItemsList();
+        toggleSnackbar("Status atualizado", "success", true);
       })
       .catch((err) => {
         console.log(err);
@@ -83,7 +84,7 @@ export function TodoProvider({ children }) {
   }
 
   function removeItemFromTodoList(key) {
-    deleteTask({id: key})
+    deleteTask({ id: key })
       .then(() => {
         loadItemsList();
         toggleSnackbar("Task excluída", "success", true);
