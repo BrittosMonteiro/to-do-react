@@ -1,9 +1,9 @@
 let API_URL = "";
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:3050/tasks/";
+  API_URL = "http://localhost:5050/tasks/";
 } else {
-  API_URL = "https://server-to-do-react.vercel.app/tasks/";
+  API_URL = "https://server-to-do-react.onrender.com/tasks/";
 }
 
 export async function createTask(data) {
@@ -34,7 +34,7 @@ export async function updateTaskStatus(id, status) {
   return await fetch(`${API_URL}`, {
     method: "PATCH",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({ id, status }),
   });
 }
 

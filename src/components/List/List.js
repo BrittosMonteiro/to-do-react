@@ -15,8 +15,8 @@ export default function List() {
     <>
       {tasksList.length > 0 ? (
         <ol className="list gap-4">
-          {tasksList.map((task) => (
-            <Item key={task.id} task={task} />
+          {tasksList.map((task, index) => (
+            <Item key={index} task={task} />
           ))}
         </ol>
       ) : (
