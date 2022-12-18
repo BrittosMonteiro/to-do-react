@@ -1,20 +1,21 @@
 import Header from "./components/common/Header";
-import Snackbar from "./components/common/Snackbar";
-import List from "./components/List/List";
-import { useTodoOptions } from "./context/TodoContext";
+import Login from "./Views/Login";
+import TooDo from "./Views/TooDo";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import CreateAccount from "./Views/CreateAccount";
 
 function App() {
-  const { snackColor, snackDisplay, snackMessage } = useTodoOptions();
   return (
     <div className="app">
       <div className="container py-8 px-4">
         <Header />
-        <List />
-        <Snackbar
-          color={snackColor}
-          display={snackDisplay}
-          message={snackMessage}
-        />
+        <Router>
+          <Routes>
+            <Route path="/" exact element={<Login />} />
+            <Route path="/create-account" exact element={<CreateAccount />} />
+            <Route path="/toodo" exact element={<TooDo />} />
+          </Routes>
+        </Router>
       </div>
     </div>
   );
