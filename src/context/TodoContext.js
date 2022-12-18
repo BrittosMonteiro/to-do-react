@@ -1,4 +1,5 @@
 import { useState, useContext, createContext, useEffect } from "react";
+import { createUserAccount, loginUser } from "../services/loginService";
 import {
   createTask,
   deleteTask,
@@ -113,7 +114,24 @@ export function TodoProvider({ children }) {
 
   function clearTodoList() {}
 
-  function login(userData) {}
+  function createAccount(userData) {
+    createUserAccount(userData)
+      .then((res) => res.json())
+      .then((res) => {
+        login({ username: res.username, password: res.password });
+        toggleSnackbar("Conta criada com sucesso", "success");
+      })
+      .catch(() => {
+        toggleSnackbar("Não foi possível criar", "failed");
+      });
+  }
+
+  function login(userData) {
+    loginUser(userData)
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }
 
   function logout(userData) {}
 
@@ -128,12 +146,14 @@ export function TodoProvider({ children }) {
     switchItemStatus,
     removeItemFromTodoList,
     clearTodoList,
+    createAccount,
     login,
     logout,
     displayModal,
     snackColor,
     snackMessage,
     snackDisplay,
+    toggleSnackbar,
   };
 
   return (
