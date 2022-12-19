@@ -8,8 +8,8 @@ export async function createTask(data) {
   });
 }
 
-export async function readTaskList() {
-  return await fetch(`${API_URL}tasks`, { method: "GET" });
+export async function readTaskList(data) {
+  return await fetch(`${API_URL}tasks/${data}`, { method: "GET" });
 }
 
 export async function readTaskListById(id) {

@@ -19,17 +19,10 @@ export function TodoProvider({ children }) {
   const [snackMessage, setSnackMessage] = useState("");
   const [snackColor, setSnackColor] = useState("");
   const [snackDisplay, setSnackDisplay] = useState(false);
-  const [userLoggedData, setUserLoggedData] = useState({});
+  const [userLoggedData, setUserLoggedData] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
 
   // Login functions
-  const user = {
-    id: "",
-    name: "",
-    username: "",
-    email: "",
-  };
-
   async function createAccount(userData) {
     return await createUserAccount(userData);
   }
@@ -39,32 +32,28 @@ export function TodoProvider({ children }) {
   }
 
   function logout() {
-    user.id = "";
-    user.name = "";
-    user.email = "";
-    user.username = "";
-    user.isLogged = false;
+    localStorage.removeItem("userLogged");
     setIsLogged(false);
+    setUserLoggedData({});
   }
 
   function setUserInformation(userData) {
+    const data = { ...userData, isLogged: true };
     setIsLogged(true);
-    user.id = userData.id;
-    user.name = userData.name;
-    user.email = userData.email;
-    user.username = userData.username;
-    user.isLogged = true;
-    localStorage.setItem("userLogged", JSON.stringify(user));
+    setUserLoggedData(data);
+    localStorage.setItem("userLogged", JSON.stringify(data));
   }
 
   //Task functions
   function loadItemsList() {
-    readTaskList()
-      .then((res) => res.json())
-      .then((res) => {
-        setTodoList(res);
-      })
-      .catch((err) => console.log(err));
+    if (userLoggedData) {
+      readTaskList(userLoggedData.id)
+        .then((res) => res.json())
+        .then((res) => {
+          setTodoList(res);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   function addItemToTodoList(newTask) {
@@ -154,7 +143,7 @@ export function TodoProvider({ children }) {
 
   useEffect(() => {
     loadItemsList();
-  }, []);
+  }, [userLoggedData]);
 
   useEffect(() => {
     const userLogged = JSON.parse(localStorage.getItem("userLogged"));
@@ -180,7 +169,6 @@ export function TodoProvider({ children }) {
     snackDisplay,
     toggleSnackbar,
     setUserInformation,
-    user,
     isLogged,
     userLoggedData,
   };

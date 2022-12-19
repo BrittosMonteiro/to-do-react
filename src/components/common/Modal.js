@@ -24,7 +24,8 @@ export default function Modal({ taskDetail, id, open, onClose }) {
   const [newItemInItemList, setNewItemInItemList] = useState("");
   const [newItemInCheckList, setNewItemInCheckList] = useState("");
 
-  const { addItemToTodoList, manageUpdateTask } = useTodoOptions();
+  const { addItemToTodoList, manageUpdateTask, userLoggedData } =
+    useTodoOptions();
 
   useEffect(() => {
     if (taskDetail) {
@@ -66,6 +67,7 @@ export default function Modal({ taskDetail, id, open, onClose }) {
       items: taskItems,
       checkList: taskCheckList,
       notes: taskNotes,
+      idUser: userLoggedData.id,
     };
 
     if (taskDetail) {
