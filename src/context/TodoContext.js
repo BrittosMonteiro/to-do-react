@@ -19,7 +19,45 @@ export function TodoProvider({ children }) {
   const [snackMessage, setSnackMessage] = useState("");
   const [snackColor, setSnackColor] = useState("");
   const [snackDisplay, setSnackDisplay] = useState(false);
+  const [userLoggedData, setUserLoggedData] = useState({});
+  const [isLogged, setIsLogged] = useState(false);
 
+  // Login functions
+  const user = {
+    id: "",
+    name: "",
+    username: "",
+    email: "",
+  };
+
+  async function createAccount(userData) {
+    return await createUserAccount(userData);
+  }
+
+  async function login(userData) {
+    return await loginUser(userData);
+  }
+
+  function logout() {
+    user.id = "";
+    user.name = "";
+    user.email = "";
+    user.username = "";
+    user.isLogged = false;
+    setIsLogged(false);
+  }
+
+  function setUserInformation(userData) {
+    setIsLogged(true);
+    user.id = userData.id;
+    user.name = userData.name;
+    user.email = userData.email;
+    user.username = userData.username;
+    user.isLogged = true;
+    localStorage.setItem("userLogged", JSON.stringify(user));
+  }
+
+  //Task functions
   function loadItemsList() {
     readTaskList()
       .then((res) => res.json())
@@ -114,29 +152,16 @@ export function TodoProvider({ children }) {
 
   function clearTodoList() {}
 
-  function createAccount(userData) {
-    createUserAccount(userData)
-      .then((res) => res.json())
-      .then((res) => {
-        login({ username: res.username, password: res.password });
-        toggleSnackbar("Conta criada com sucesso", "success");
-      })
-      .catch(() => {
-        toggleSnackbar("Não foi possível criar", "failed");
-      });
-  }
-
-  function login(userData) {
-    loginUser(userData)
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }
-
-  function logout(userData) {}
-
   useEffect(() => {
     loadItemsList();
+  }, []);
+
+  useEffect(() => {
+    const userLogged = JSON.parse(localStorage.getItem("userLogged"));
+    if (userLogged) {
+      setUserLoggedData(userLogged);
+      setIsLogged(userLogged.isLogged);
+    }
   }, []);
 
   const todoStates = {
@@ -154,6 +179,10 @@ export function TodoProvider({ children }) {
     snackMessage,
     snackDisplay,
     toggleSnackbar,
+    setUserInformation,
+    user,
+    isLogged,
+    userLoggedData,
   };
 
   return (

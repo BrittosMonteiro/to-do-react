@@ -10,8 +10,8 @@ function App() {
   const { snackColor, snackDisplay, snackMessage } = useTodoOptions();
 
   return (
-    <div className="app">
-      <div className="container py-8 px-4">
+    <div className="app py-4">
+      <div className="container pa-4">
         <Header />
         <Router>
           <Routes>
