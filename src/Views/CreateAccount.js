@@ -158,7 +158,7 @@ export default function CreateAccount() {
               to="/"
               className="text-white-1 row align-items-center font-md gap-2"
             >
-              Accesar minha conta{" "}
+              Já tenho uma conta{" "}
               <ArrowCircleRight className="btn-icon icon-md" />
             </Link>
             <button
