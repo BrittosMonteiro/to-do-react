@@ -47,7 +47,7 @@ export function TodoProvider({ children }) {
   //Task functions
   function loadItemsList() {
     if (userLoggedData) {
-      readTaskList(userLoggedData.id)
+      readTaskList(userLoggedData)
         .then((res) => res.json())
         .then((res) => {
           setTodoList(res);
@@ -57,7 +57,7 @@ export function TodoProvider({ children }) {
   }
 
   function addItemToTodoList(newTask) {
-    createTask(newTask)
+    createTask(newTask, userLoggedData)
       .then((res) => res.json())
       .then((res) => {
         setTodoList([res, ...todoList]);
@@ -73,7 +73,7 @@ export function TodoProvider({ children }) {
   }
 
   function manageUpdateTask(task) {
-    updateTask(task)
+    updateTask(task, userLoggedData)
       .then(() => {
         loadItemsList();
         toggleSnackbar("Task alterada", "success", true);
@@ -100,7 +100,7 @@ export function TodoProvider({ children }) {
   }
 
   function updatetatus(taskId, status) {
-    updateTaskStatus(taskId, status)
+    updateTaskStatus(taskId, status, userLoggedData)
       .then(() => {
         loadItemsList();
         toggleSnackbar("Status atualizado", "success", true);
@@ -112,7 +112,7 @@ export function TodoProvider({ children }) {
   }
 
   function removeItemFromTodoList(key) {
-    deleteTask({ id: key })
+    deleteTask({ id: key }, userLoggedData)
       .then(() => {
         loadItemsList();
         toggleSnackbar("Task excluída", "success", true);
