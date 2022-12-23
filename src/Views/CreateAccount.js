@@ -69,7 +69,14 @@ export default function CreateAccount() {
     loginUser({ username, password })
       .then((res) => res.json())
       .then((res) => {
-        dispatch(setUser(res));
+        dispatch(
+          setUser({
+            id: res.id,
+            token: res.token,
+            username: res.username,
+            isLogged: true,
+          })
+        );
         navigate("/toodo");
       })
       .catch(() => {

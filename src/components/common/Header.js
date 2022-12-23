@@ -18,7 +18,14 @@ export default function Header() {
 
   return (
     <header className="header mb-8">
-      <h1 className="text-white-1 font-lg font-regular">TOO-DO</h1>
+      <div className="row align-items-center gap-2">
+        <h1 className="text-white-1 font-lg font-regular">TOO-DO</h1>
+        {userSession.isLogged && (
+          <p className="text-dark-3 font-md font-medium bg-white-1 pa-1 border-radius-soft">
+            {`{ ${userSession.username} }`}
+          </p>
+        )}
+      </div>
       {userSession.isLogged && (
         <div className="gap-2" style={{ display: "flex" }}>
           <button
