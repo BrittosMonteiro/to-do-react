@@ -10,7 +10,7 @@ import {
 } from "phosphor-react";
 import { createTask, updateTask } from "../../services/taskServices";
 import { useDispatch, useSelector } from "react-redux";
-import { addTaskToList } from "../../store/action/taskAction";
+import { addTaskToList, updateTaskOnList } from "../../store/action/taskAction";
 import {
   displayMessageBox,
   hideMessageBox,
@@ -81,7 +81,9 @@ export default function Modal({ taskDetail, id, open, onClose }) {
     if (taskDetail) {
       data = { ...data, id: taskId };
       updateTask(data, userSession)
-        .then(() => {
+        .then((res) => res.json())
+        .then((res) => {
+          dispatch(updateTaskOnList(res));
           toggleMessageOptions("success", true, "Task alterada");
         })
         .catch((err) => {

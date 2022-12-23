@@ -8,7 +8,10 @@ import {
   displayMessageBox,
   hideMessageBox,
 } from "../../store/action/toggleAction";
-import { removeTaskFromList } from "../../store/action/taskAction";
+import {
+  updateTaskOnList,
+  removeTaskFromList,
+} from "../../store/action/taskAction";
 
 export default function Item({ task }) {
   const dispatch = useDispatch();
@@ -44,8 +47,9 @@ export default function Item({ task }) {
 
   function manageTaskStatus(taskId, status) {
     updateTaskStatus(taskId, status, userSession)
-      .then(() => {
-        // loadItemsList();
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch(updateTaskOnList(res));
         toggleMessageOptions("success", true, "Status atualizado");
       })
       .catch(() => {
