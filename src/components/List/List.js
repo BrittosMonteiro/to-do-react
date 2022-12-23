@@ -1,30 +1,23 @@
-import { useEffect, useState } from "react";
-import { readTaskList } from "../../services/taskServices";
 import Item from "./Item";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function List() {
-  const userSession = useSelector((state) => {
-    return state.login;
+  const taskList = useSelector((state) => {
+    return state.task;
   });
-  const [tasksList, setTasksList] = useState([]);
+
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    readTaskList(userSession)
-      .then((res) => res.json())
-      .then((res) => {
-        setTasksList(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [userSession]);
+    setTasks(taskList);
+  }, [setTasks, taskList]);
 
   return (
     <>
-      {tasksList.length > 0 ? (
+      {tasks.length > 0 ? (
         <ol className="list gap-4">
-          {tasksList.map((task, index) => (
+          {tasks.map((task, index) => (
             <Item key={index} task={task} />
           ))}
         </ol>

@@ -8,6 +8,7 @@ import {
   displayMessageBox,
   hideMessageBox,
 } from "../../store/action/toggleAction";
+import { removeTaskFromList } from "../../store/action/taskAction";
 
 export default function Item({ task }) {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export default function Item({ task }) {
   function deleteItemFromList(id) {
     deleteTask({ id }, userSession)
       .then(() => {
-        // loadItemsList(); mandar carregar ou remover da lista
+        dispatch(removeTaskFromList(id));
         toggleMessageOptions("success", true, "Task excluída");
       })
       .catch((err) => {

@@ -10,7 +10,7 @@ import {
 } from "phosphor-react";
 import { createTask, updateTask } from "../../services/taskServices";
 import { useDispatch, useSelector } from "react-redux";
-import { setTaskList } from "../../store/action/taskAction";
+import { addTaskToList } from "../../store/action/taskAction";
 import {
   displayMessageBox,
   hideMessageBox,
@@ -75,36 +75,29 @@ export default function Modal({ taskDetail, id, open, onClose }) {
       items: taskItems,
       checkList: taskCheckList,
       notes: taskNotes,
-      idUser: userSession.token,
+      idUser: userSession.id,
     };
 
     if (taskDetail) {
       data = { ...data, id: taskId };
-      updateTask(data, userSession.token)
+      updateTask(data, userSession)
         .then(() => {
-          // loadItemsList();
           toggleMessageOptions("success", true, "Task alterada");
         })
         .catch((err) => {
           console.log(err);
           toggleMessageOptions("failed", true, "Erro ao alterar");
-        })
-        .finally(() => {
-          // displayModalOnScreen(false);
         });
     } else {
-      createTask(data, userSession.token)
+      createTask(data, userSession)
         .then((res) => res.json())
         .then((res) => {
-          dispatch(setTaskList(res));
+          dispatch(addTaskToList(res));
           toggleMessageOptions("success", true, "Task criada");
         })
         .catch((err) => {
           console.log(err);
           toggleMessageOptions("failed", true, "Erro ao criar");
-        })
-        .finally(() => {
-          // displayModalOnScreen(false);
         });
     }
     onClose();
