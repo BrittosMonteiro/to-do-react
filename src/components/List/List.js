@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
-import { useTodoOptions } from "../../context/TodoContext";
+import { readTaskList } from "../../services/taskServices";
 import Item from "./Item";
+import { useSelector } from "react-redux";
 
 export default function List() {
+  const userSession = useSelector((state) => {
+    return state.login;
+  });
   const [tasksList, setTasksList] = useState([]);
 
-  const { todoList } = useTodoOptions();
-
   useEffect(() => {
-    setTasksList(todoList);
-  }, [todoList]);
+    readTaskList(userSession)
+      .then((res) => res.json())
+      .then((res) => {
+        setTasksList(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [userSession]);
 
   return (
     <>

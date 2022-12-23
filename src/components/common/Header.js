@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
-
-import { useTodoOptions } from "../../context/TodoContext";
 import { PlusCircle, SignOut } from "phosphor-react";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../../store/action/loginAction";
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const userSession = useSelector((state) => {
+    return state.login;
+  });
+
   const [open, setOpen] = useState(false);
-
-  const { displayModal, isLogged, logout } = useTodoOptions();
-
-  useEffect(() => {
-    closeModal();
-  }, [displayModal]);
 
   function closeModal() {
     setOpen(false);
@@ -20,7 +19,7 @@ export default function Header() {
   return (
     <header className="header mb-8">
       <h1 className="text-white-1 font-lg font-regular">TOO-DO</h1>
-      {isLogged && (
+      {userSession.isLogged && (
         <div className="gap-2" style={{ display: "flex" }}>
           <button
             type="button"
@@ -33,7 +32,7 @@ export default function Header() {
           <button
             type="button"
             className="btn-default"
-            onClick={() => logout()}
+            onClick={() => dispatch(removeUser())}
           >
             <SignOut className="btn-icon text-white-1 icon-md" />
           </button>

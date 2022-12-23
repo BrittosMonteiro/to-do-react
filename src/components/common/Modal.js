@@ -8,9 +8,20 @@ import {
   Trash,
   CheckSquare,
 } from "phosphor-react";
-import { useTodoOptions } from "../../context/TodoContext";
+import { createTask, updateTask } from "../../services/taskServices";
+import { useDispatch, useSelector } from "react-redux";
+import { setTaskList } from "../../store/action/taskAction";
+import {
+  displayMessageBox,
+  hideMessageBox,
+} from "../../store/action/toggleAction";
 
 export default function Modal({ taskDetail, id, open, onClose }) {
+  const dispatch = useDispatch();
+  const userSession = useSelector((state) => {
+    return state.login;
+  });
+
   const [taskId, setTaskId] = useState(null);
   const [taskStatus, setTaskStatus] = useState(0);
   const [taskTitle, setTaskTitle] = useState("");
@@ -23,9 +34,6 @@ export default function Modal({ taskDetail, id, open, onClose }) {
 
   const [newItemInItemList, setNewItemInItemList] = useState("");
   const [newItemInCheckList, setNewItemInCheckList] = useState("");
-
-  const { addItemToTodoList, manageUpdateTask, userLoggedData } =
-    useTodoOptions();
 
   useEffect(() => {
     if (taskDetail) {
@@ -67,14 +75,37 @@ export default function Modal({ taskDetail, id, open, onClose }) {
       items: taskItems,
       checkList: taskCheckList,
       notes: taskNotes,
-      idUser: userLoggedData.id,
+      idUser: userSession.token,
     };
 
     if (taskDetail) {
       data = { ...data, id: taskId };
-      manageUpdateTask(data);
+      updateTask(data, userSession.token)
+        .then(() => {
+          // loadItemsList();
+          toggleMessageOptions("success", true, "Task alterada");
+        })
+        .catch((err) => {
+          console.log(err);
+          toggleMessageOptions("failed", true, "Erro ao alterar");
+        })
+        .finally(() => {
+          // displayModalOnScreen(false);
+        });
     } else {
-      addItemToTodoList(data);
+      createTask(data, userSession.token)
+        .then((res) => res.json())
+        .then((res) => {
+          dispatch(setTaskList(res));
+          toggleMessageOptions("success", true, "Task criada");
+        })
+        .catch((err) => {
+          console.log(err);
+          toggleMessageOptions("failed", true, "Erro ao criar");
+        })
+        .finally(() => {
+          // displayModalOnScreen(false);
+        });
     }
     onClose();
     clearFormField();
@@ -132,6 +163,19 @@ export default function Modal({ taskDetail, id, open, onClose }) {
   function closeModal(e) {
     const elementId = e.target.id === "overlay";
     if (elementId) onClose();
+  }
+
+  function toggleMessageOptions(color, display, message) {
+    dispatch(
+      displayMessageBox({
+        color,
+        message,
+        display,
+      })
+    );
+    setTimeout(() => {
+      dispatch(hideMessageBox());
+    }, 5000);
   }
 
   function clearFormField() {

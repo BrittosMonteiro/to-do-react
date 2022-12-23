@@ -1,17 +1,19 @@
 import List from "../components/List/List";
-import { useTodoOptions } from "../context/TodoContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function TooDo() {
-  const { isLogged } = useTodoOptions();
+  const login = useSelector((state) => {
+    return state.login;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLogged) {
+    if (!login.isLogged) {
       navigate("/");
     }
-  }, [isLogged, navigate]);
+  }, [login, navigate]);
 
-  return <>{isLogged && <List />}</>;
+  return <>{login.isLogged && <List />}</>;
 }

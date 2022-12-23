@@ -1,9 +1,21 @@
 import { ArrowCircleRight } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useTodoOptions } from "../context/TodoContext";
+import { createUserAccount, loginUser } from "../services/loginService";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  displayMessageBox,
+  hideMessageBox,
+} from "../store/action/toggleAction";
+import { setUser } from "../store/action/loginAction";
 
 export default function CreateAccount() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userSession = useSelector((state) => {
+    return state.login;
+  });
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -11,19 +23,15 @@ export default function CreateAccount() {
   const [confirmPass, setConfirmPass] = useState("");
   const [border, setBorder] = useState(false);
 
-  const { toggleSnackbar, createAccount, login, setUserInformation, isLogged } =
-    useTodoOptions();
-  const navigate = useNavigate();
-
   function handleCreate(e) {
     e.preventDefault();
     if (!name || !email || !username || !password || !confirmPass) {
-      toggleSnackbar("Preencha os campos corretamente", "failed");
+      toggleMessageOptions("failed", true, "Preencha os campos corretamente");
       return;
     }
 
     if (password !== confirmPass) {
-      toggleSnackbar("Senhas não são iguais", "failed");
+      toggleMessageOptions("failed", true, "Senhas não são iguais");
       setBorder(true);
       setTimeout(() => {
         setBorder(false);
@@ -41,46 +49,68 @@ export default function CreateAccount() {
   }
 
   function manageCreate(userData) {
-    createAccount(userData)
+    createUserAccount(userData)
       .then((res) => res.json())
       .then((res) => {
-        toggleSnackbar("Conta criada com sucesso", "success");
-        setName("");
-        setEmail("");
-        setUsername("");
-        setPassword("");
-        setConfirmPass("");
+        toggleMessageOptions("success", true, "Conta criada com sucesso");
+        clearFields();
         if (res.username && res.password) {
-          return login({ username: res.username, password: res.password })
-            .then((res) => res.json())
-            .then((res) => {
-              setUserInformation(res);
-              navigate("/toodo");
-            })
-            .catch(() => {
-              toggleSnackbar(
-                "Ops... não conseguimos acessar. Tente novamente em alguns instantes :/",
-                "failed"
-              );
-            });
+          return login(res.username, res.password);
         } else {
-          toggleSnackbar("E-mail/usuário já cadastrado", "failed");
+          toggleMessageOptions("failed", true, "E-mail/usuário já cadastrado");
         }
       })
       .catch(() => {
-        toggleSnackbar("Não foi possível criar", "failed");
+        toggleMessageOptions("failed", true, "Não foi possível criar");
       });
   }
 
+  function login(username, password) {
+    loginUser({ username, password })
+      .then((res) => res.json())
+      .then((res) => {
+        dispatch(setUser(res));
+        navigate("/toodo");
+      })
+      .catch(() => {
+        toggleMessageOptions(
+          "failed",
+          true,
+          "Ops... não conseguimos acessar. Tente novamente em alguns instantes :/"
+        );
+      });
+  }
+
+  function clearFields() {
+    setName("");
+    setEmail("");
+    setUsername("");
+    setPassword("");
+    setConfirmPass("");
+  }
+
+  function toggleMessageOptions(color, display, message) {
+    dispatch(
+      displayMessageBox({
+        color,
+        message,
+        display,
+      })
+    );
+    setTimeout(() => {
+      dispatch(hideMessageBox());
+    }, 5000);
+  }
+
   useEffect(() => {
-    if (isLogged) {
+    if (userSession.isLogged) {
       navigate("/toodo");
     }
-  }, [isLogged, navigate]);
+  }, [userSession, navigate]);
 
   return (
     <>
-      {!isLogged && (
+      {!userSession.isLogged && (
         <form
           onSubmit={handleCreate}
           className="bg-dark-2 pa-4 ma-auto column"

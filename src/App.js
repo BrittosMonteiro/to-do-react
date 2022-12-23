@@ -1,13 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useTodoOptions } from "./context/TodoContext";
 import Header from "./components/common/Header";
 import Login from "./Views/Login";
 import TooDo from "./Views/TooDo";
 import CreateAccount from "./Views/CreateAccount";
 import Snackbar from "./components/common/Snackbar";
+import { useDispatch } from "react-redux";
+import { setUser } from "./store/action/loginAction";
 
 function App() {
-  const { snackColor, snackDisplay, snackMessage } = useTodoOptions();
+  const dispatch = useDispatch();
+
+  const userSession = JSON.parse(localStorage.getItem("userSession"));
+  if (userSession) {
+    dispatch(setUser(userSession));
+  }
 
   return (
     <div className="app py-4">
@@ -20,11 +26,7 @@ function App() {
             <Route path="/toodo" exact element={<TooDo />} />
           </Routes>
         </Router>
-        <Snackbar
-          color={snackColor}
-          display={snackDisplay}
-          message={snackMessage}
-        />
+        <Snackbar />
       </div>
     </div>
   );

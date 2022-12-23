@@ -1,23 +1,72 @@
 import { useState } from "react";
 import { Circle, CheckCircle, Trash, XCircle } from "phosphor-react";
 
-import { useTodoOptions } from "../../context/TodoContext";
 import Modal from "../common/Modal";
+import { deleteTask, updateTaskStatus } from "../../services/taskServices";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  displayMessageBox,
+  hideMessageBox,
+} from "../../store/action/toggleAction";
 
 export default function Item({ task }) {
+  const dispatch = useDispatch();
+  const userSession = useSelector((state) => {
+    return state.login;
+  });
+
   const [open, setOpen] = useState(false);
-  const { removeItemFromTodoList, switchItemStatus } = useTodoOptions();
 
   function deleteItemFromList(id) {
-    removeItemFromTodoList(id);
+    deleteTask({ id }, userSession)
+      .then(() => {
+        // loadItemsList(); mandar carregar ou remover da lista
+        toggleMessageOptions("success", true, "Task excluída");
+      })
+      .catch((err) => {
+        console.log(err);
+        toggleMessageOptions("failed", true, "Problema ao excluir");
+      });
   }
 
   function changeItemStatus(taskId, status) {
-    switchItemStatus(taskId, status);
+    if (status === 0 || status === 1) {
+      manageTaskStatus(taskId, 2);
+    } else {
+      if (status >= 3) {
+        manageTaskStatus(taskId, 1);
+      } else {
+        manageTaskStatus(taskId, status + 1);
+      }
+    }
+  }
+
+  function manageTaskStatus(taskId, status) {
+    updateTaskStatus(taskId, status, userSession)
+      .then(() => {
+        // loadItemsList();
+        toggleMessageOptions("success", true, "Status atualizado");
+      })
+      .catch(() => {
+        toggleMessageOptions("failed", true, "Erro ao atualizar");
+      });
   }
 
   function closeModal() {
     setOpen(false);
+  }
+
+  function toggleMessageOptions(color, display, message) {
+    dispatch(
+      displayMessageBox({
+        color,
+        message,
+        display,
+      })
+    );
+    setTimeout(() => {
+      dispatch(hideMessageBox());
+    }, 5000);
   }
 
   return (
